@@ -10,14 +10,14 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain.chains import RetrievalQA
-from langchain_openai import AzureChatOpenAI  # Changed from Groq
+from langchain_openai import AzureChatOpenAI  
 
 # Azure OpenAI Configuration
 os.environ["AZURE_OPENAI_API_KEY"] = "<AZURE_AI_KEY>"
 os.environ["AZURE_OPENAI_ENDPOINT"] = "https://<resource>.openai.azure.com/"
 os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"] = "gpt-4-deployment"  # deployment name
 
-# Fetch and process PDF (unchanged)
+# Fetch and process PDF
 url = "https://dspmuranchi.ac.in/pdf/Blog/Python%20Built-In%20Functions.pdf"   # we can use input()
 response = requests.get(url)
 with open("python_inbuildfunction.pdf", "wb") as f:
@@ -32,7 +32,7 @@ text_splitter = CharacterTextSplitter(
 )
 texts = text_splitter.split_documents(documents)
 
-# Vector DB setup (unchanged)
+# Vector DB setup
 embeddings = HuggingFaceEmbeddings()
 persist_directory = "vector_db"
 vectordb = Chroma.from_documents(
@@ -49,7 +49,7 @@ llm = AzureChatOpenAI(
     api_version="2024-02-15-preview"  # Use latest stable version
 )
 
-# QA Chain (unchanged)
+# QA Chain
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
     chain_type="stuff",
@@ -57,7 +57,7 @@ qa_chain = RetrievalQA.from_chain_type(
     return_source_documents=True
 )
 
-# Query execution (unchanged)
+# Query execution
 query = input()
 response = qa_chain.invoke({"query": query})
 print(response["result"])
